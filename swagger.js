@@ -5,7 +5,7 @@ const doc = {
     title: 'Digital Bookstore API',
     description: 'An API for managing books and authors in a digital bookstore.',
   },
-  host: 'https://digital-bookstore-api.onrender.com', 
+  host: 'digital-bookstore-api.onrender.com', 
   schemes: ['https'],      
 };
 

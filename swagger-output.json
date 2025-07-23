@@ -5,7 +5,7 @@
     "description": "An API for managing books and authors in a digital bookstore.",
     "version": "1.0.0"
   },
-  "host": "https://digital-bookstore-api.onrender.com",
+  "host": "digital-bookstore-api.onrender.com",
   "basePath": "/",
   "schemes": [
     "https"
