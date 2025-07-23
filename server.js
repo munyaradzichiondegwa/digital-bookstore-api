@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const cors = require('cors'); // ✅ Required for proper CORS handling
+const cors = require('cors');
 const db = require('./db/connect');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger-output.json');
@@ -8,33 +8,27 @@ const swaggerDocument = require('./swagger-output.json');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// ✅ Use CORS middleware
+// Enable CORS
 app.use(cors());
 
-// ✅ Optional: Also keep your manual fallback (not required if using app.use(cors()))
-// app.use((req, res, next) => {
-//   res.setHeader('Access-Control-Allow-Origin', '*');
-//   next();
-// });
-
-// Middleware to parse JSON
+// Parse JSON request bodies
 app.use(bodyParser.json());
 
-// ✅ Redirect root to Swagger docs
+// Redirect root to Swagger UI
 app.get('/', (req, res) => {
   res.redirect('/api-docs');
 });
 
-// ✅ Swagger UI
+// Swagger documentation route
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// ✅ API routes
-app.use('/api', require('./routes'));
+// API routes (no prefix now)
+app.use('/', require('./routes'));
 
-// ✅ Connect to DB and start server
+// Connect to the database and start the server
 db.initDb((err) => {
   if (err) {
-    console.log(err);
+    console.error('Database connection error:', err);
   } else {
     app.listen(port, () => {
       console.log(`✅ DB Connected and server running on port ${port}`);
