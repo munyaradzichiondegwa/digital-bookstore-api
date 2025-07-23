@@ -5,8 +5,8 @@ const doc = {
     title: 'Digital Bookstore API',
     description: 'An API for managing books and authors in a digital bookstore.',
   },
-  host: 'localhost:3000', // Change to your Render URL when deployed
-  schemes: ['http'],      // Change to 'https' for production
+  host: 'https://digital-bookstore-api.onrender.com', 
+  schemes: ['https'],      
 };
 
 const outputFile = './swagger-output.json';
