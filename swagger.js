@@ -3,14 +3,16 @@ const swaggerAutogen = require('swagger-autogen')();
 const doc = {
   info: {
     title: 'Digital Bookstore API',
-    description: 'An API for managing books and authors in a digital bookstore.',
+    description: 'An API for managing books and authors in a digital bookstore.'
   },
-  host: 'digital-bookstore-api.onrender.com', 
-  schemes: ['https'],      
+  host: 'digital-bookstore-api.onrender.com',
+  schemes: ['https'],
+  basePath: '/'
 };
 
 const outputFile = './swagger-output.json';
-const endpointsFiles = ['./routes/index.js']; // Path to your main router file
+const endpointsFiles = ['./routes/index.js'];
 
-// generate swagger.json
-swaggerAutogen(outputFile, endpointsFiles, doc);
+swaggerAutogen(outputFile, endpointsFiles, doc).then(() => {
+  console.log('Swagger file generated successfully!');
+});
