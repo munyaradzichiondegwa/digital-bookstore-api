@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors'); // ✅ Required for proper CORS handling
 const db = require('./db/connect');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger-output.json');
@@ -7,24 +8,30 @@ const swaggerDocument = require('./swagger-output.json');
 const app = express();
 const port = process.env.PORT || 3000;
 
-app
-  .use(bodyParser.json())
-  .use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    next();
-  });
+// ✅ Use CORS middleware
+app.use(cors());
 
-// Redirect root to Swagger
+// ✅ Optional: Also keep your manual fallback (not required if using app.use(cors()))
+// app.use((req, res, next) => {
+//   res.setHeader('Access-Control-Allow-Origin', '*');
+//   next();
+// });
+
+// Middleware to parse JSON
+app.use(bodyParser.json());
+
+// ✅ Redirect root to Swagger docs
 app.get('/', (req, res) => {
   res.redirect('/api-docs');
 });
 
-// Swagger docs
+// ✅ Swagger UI
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// API routes (adjust your route files accordingly)
+// ✅ API routes
 app.use('/api', require('./routes'));
 
+// ✅ Connect to DB and start server
 db.initDb((err) => {
   if (err) {
     console.log(err);
