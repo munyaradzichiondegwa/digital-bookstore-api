@@ -3,6 +3,9 @@ const db = require('../db/connect');
 
 // GET /authors - Retrieve all authors
 const getAllAuthors = async (req, res) => {
+  // #swagger.tags = ['Authors']
+  // #swagger.summary = 'Get all authors'
+  // #swagger.description = 'Retrieves a list of all authors from the database.'
   try {
     const result = await db.getDb().collection('authors').find();
     const lists = await result.toArray();
@@ -15,6 +18,10 @@ const getAllAuthors = async (req, res) => {
 
 // GET /authors/{id} - Retrieve a single author
 const getSingleAuthor = async (req, res) => {
+  // #swagger.tags = ['Authors']
+  // #swagger.summary = 'Get a single author by ID'
+  // #swagger.description = 'Retrieves a single author using their unique MongoDB ObjectId.'
+  // #swagger.parameters['id'] = { description: 'Author ID', required: true }
   try {
     const authorId = new ObjectId(req.params.id);
     const result = await db.getDb().collection('authors').find({ _id: authorId });
@@ -32,6 +39,16 @@ const getSingleAuthor = async (req, res) => {
 
 // POST /authors - Create a new author
 const createAuthor = async (req, res) => {
+  // #swagger.tags = ['Authors']
+  // #swagger.summary = 'Create a new author'
+  // #swagger.description = 'Creates a new author in the database. Requires authentication.'
+  // #swagger.security = [{ "github_oauth": [] }]
+  /*  #swagger.parameters['obj'] = {
+        in: 'body',
+        description: 'The author data to create.',
+        required: true,
+        schema: { $ref: "#/definitions/AuthorInput" }
+  } */
   try {
     const author = {
       firstName: req.body.firstName,
@@ -52,6 +69,17 @@ const createAuthor = async (req, res) => {
 
 // PUT /authors/{id} - Update an author
 const updateAuthor = async (req, res) => {
+  // #swagger.tags = ['Authors']
+  // #swagger.summary = 'Update an existing author'
+  // #swagger.description = 'Updates an existing author by their ID. Requires authentication.'
+  // #swagger.security = [{ "github_oauth": [] }]
+  // #swagger.parameters['id'] = { description: 'Author ID', required: true }
+  /*  #swagger.parameters['obj'] = {
+        in: 'body',
+        description: 'The author data to update.',
+        required: true,
+        schema: { $ref: "#/definitions/AuthorInput" }
+  } */
   try {
     const authorId = new ObjectId(req.params.id);
     const author = {
@@ -77,6 +105,11 @@ const updateAuthor = async (req, res) => {
 
 // DELETE /authors/{id} - Delete an author
 const deleteAuthor = async (req, res) => {
+  // #swagger.tags = ['Authors']
+  // #swagger.summary = 'Delete an author'
+  // #swagger.description = 'Deletes an author by their ID. Requires authentication.'
+  // #swagger.security = [{ "github_oauth": [] }]
+  // #swagger.parameters['id'] = { description: 'Author ID', required: true }
   try {
     const authorId = new ObjectId(req.params.id);
     const response = await db.getDb().collection('authors').deleteOne({ _id: authorId });

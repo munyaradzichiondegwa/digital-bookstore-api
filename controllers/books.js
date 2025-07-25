@@ -3,6 +3,9 @@ const db = require('../db/connect');
 
 // GET /books - Retrieve all books
 const getAllBooks = async (req, res) => {
+  // #swagger.tags = ['Books']
+  // #swagger.summary = 'Get all books'
+  // #swagger.description = 'Retrieves a list of all books from the database.'
   try {
     const result = await db.getDb().collection('books').find();
     const lists = await result.toArray();
@@ -15,6 +18,10 @@ const getAllBooks = async (req, res) => {
 
 // GET /books/{id} - Retrieve a single book
 const getSingleBook = async (req, res) => {
+  // #swagger.tags = ['Books']
+  // #swagger.summary = 'Get a single book by ID'
+  // #swagger.description = 'Retrieves a single book using its unique MongoDB ObjectId.'
+  // #swagger.parameters['id'] = { description: 'Book ID', required: true }
   try {
     const bookId = new ObjectId(req.params.id);
     const result = await db.getDb().collection('books').find({ _id: bookId });
@@ -32,10 +39,20 @@ const getSingleBook = async (req, res) => {
 
 // POST /books - Create a new book
 const createBook = async (req, res) => {
+  // #swagger.tags = ['Books']
+  // #swagger.summary = 'Create a new book'
+  // #swagger.description = 'Creates a new book in the database. Requires authentication.'
+  // #swagger.security = [{ "github_oauth": [] }]
+  /*  #swagger.parameters['obj'] = {
+        in: 'body',
+        description: 'The book data to create.',
+        required: true,
+        schema: { $ref: "#/definitions/BookInput" }
+  } */
   try {
     const book = {
       title: req.body.title,
-      authorId: new ObjectId(req.body.authorId), // Assuming authorId is provided
+      authorId: new ObjectId(req.body.authorId),
       publicationYear: req.body.publicationYear,
       genre: req.body.genre,
       isbn: req.body.isbn,
@@ -57,6 +74,17 @@ const createBook = async (req, res) => {
 
 // PUT /books/{id} - Update a book
 const updateBook = async (req, res) => {
+  // #swagger.tags = ['Books']
+  // #swagger.summary = 'Update an existing book'
+  // #swagger.description = 'Updates an existing book by its ID. Requires authentication.'
+  // #swagger.security = [{ "github_oauth": [] }]
+  // #swagger.parameters['id'] = { description: 'Book ID', required: true }
+  /*  #swagger.parameters['obj'] = {
+        in: 'body',
+        description: 'The book data to update.',
+        required: true,
+        schema: { $ref: "#/definitions/BookInput" }
+  } */
   try {
     const bookId = new ObjectId(req.params.id);
     const book = {
@@ -74,12 +102,11 @@ const updateBook = async (req, res) => {
     if (response.modifiedCount > 0) {
       res.status(204).send();
     } else {
-        // This could mean the book was not found or the data was the same
         const existingBook = await db.getDb().collection('books').findOne({ _id: bookId });
         if (!existingBook) {
             return res.status(404).json({ message: 'Book not found' });
         }
-        res.status(204).send(); // Data was the same, but request is successful
+        res.status(204).send();
     }
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -88,6 +115,11 @@ const updateBook = async (req, res) => {
 
 // DELETE /books/{id} - Delete a book
 const deleteBook = async (req, res) => {
+  // #swagger.tags = ['Books']
+  // #swagger.summary = 'Delete a book'
+  // #swagger.description = 'Deletes a book by its ID. Requires authentication.'
+  // #swagger.security = [{ "github_oauth": [] }]
+  // #swagger.parameters['id'] = { description: 'Book ID', required: true }
   try {
     const bookId = new ObjectId(req.params.id);
     const response = await db.getDb().collection('books').deleteOne({ _id: bookId });
