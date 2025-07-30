@@ -41,11 +41,8 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-// === GitHub OAuth Routes ===
-const githubAuthRoutes = require('./auth/github');
-app.use('/auth', githubAuthRoutes);
-
 // === Swagger UI ===
+// Redirect root to API documentation for user-friendliness
 app.get('/', (req, res) => {
   res.redirect('/api-docs');
 });
@@ -53,6 +50,8 @@ app.get('/', (req, res) => {
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // === App Routes ===
+// The main router in 'routes/index.js' now handles all endpoints,
+// including '/auth', '/books', and '/authors'.
 app.use('/', require('./routes'));
 
 // === DB Connection & Server Start ===
